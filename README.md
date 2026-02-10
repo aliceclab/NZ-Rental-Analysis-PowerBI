@@ -20,3 +20,8 @@ It compares rental trends between Auckland and Rotorua District to help potentia
 
 ## 📂 How to View
 You can download the `.pbix` file from the `/PowerBI_Files` folder to interact with the full dashboard.
+
+## 📊 Business Context
+The New Zealand rental market has shown regional divergence in recent years.
+This dashboard helps compare affordability trends and rental growth patterns
+between Auckland and Rotorua, supporting decision-making for investors and renters.
