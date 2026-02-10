@@ -1,6 +1,5 @@
-# NZ-Rental-Analysis-PowerBI
-# New Zealand Rental Market Analysis 
-### (Auckland vs. Rotorua)
+
+# New Zealand Rental Market Analysis (Auckland vs. Rotorua)
 
 ## 🎯 Project Objective
 This project serves as a practical demonstration of data visualization and storytelling. 
