@@ -25,3 +25,7 @@ You can download the `.pbix` file from the `/PowerBI_Files` folder to interact w
 The New Zealand rental market has shown regional divergence in recent years.
 This dashboard helps compare affordability trends and rental growth patterns
 between Auckland and Rotorua, supporting decision-making for investors and renters.
+
+## 🗂 Data Source
+Public NZ rental bond statistics (aggregated at quarterly level).
+
