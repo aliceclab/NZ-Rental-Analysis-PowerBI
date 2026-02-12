@@ -1,31 +1,33 @@
-
-# New Zealand Rental Market Analysis (Auckland vs. Rotorua)
+# 🇳🇿 New Zealand Rental Market Analysis (Auckland vs. Rotorua)
 
 ## 🎯 Project Objective
-This project serves as a practical demonstration of data visualization and storytelling. 
-It compares rental trends between Auckland and Rotorua District to help potential tenants or investors understand market shifts.
+This project serves as a practical demonstration of data visualization and analytical storytelling. It compares rental trends between **Auckland** and **Rotorua District** to help potential tenants or investors understand regional market shifts and affordability.
 
-## 🛠️ Tools & Skills
-* **Visualization**: Power BI Desktop (Time-intelligence DAX, Sync Slicers, Custom Tooltips)
-* **Data Integrity**: Implemented a Data Quality dashboard to track missing YoY values.
-* **ID Strategy**: Designed with a focus on user-centric navigation and clarity.
+## 💡 Business Insights (3W1A Framework)
+* **What (Signal):** Auckland maintains a high baseline rent ($700), but Rotorua exhibits a more aggressive growth percentage.
+* **Where (Location):** The most significant divergence occurs in the "3-Bedroom House" segment, where Rotorua is catching up quickly.
+* **Why (Evidence):** Data shows a correlation between regional supply shortages and the recent YoY spike in Rotorua.
+* **Action:** Investors should prioritize yield-growth regions like Rotorua, while renters in Auckland should lock in longer-term leases to hedge against baseline stability.
 
-## 💡 Key Findings
-1. **Trend Divergence**: While Auckland maintains a higher absolute rent ($700), Rotorua shows a more consistent upward trajectory.
-2. **Quality Control**: Identified an 18.2% data gap in YoY metrics, addressed by filtering for matched quarterly pairs to ensure accuracy.
+## 🛠️ Technical Architecture & Scalability
+While this project utilizes **Power Query (M language)** for data transformation to maximize development efficiency for this dataset, I have designed the workflow with enterprise scalability in mind.
 
-## 📷 Dashboard Preview
-![Trend Page](Dashboard_Images/trend_page.png)
-![Quality Page](Dashboard_Images/quality_page.png)
 
-## 📂 How to View
-You can download the `.pbix` file from the `/PowerBI_Files` folder to interact with the full dashboard.
 
-## 📊 Business Context
-The New Zealand rental market has shown regional divergence in recent years.
-This dashboard helps compare affordability trends and rental growth patterns
-between Auckland and Rotorua, supporting decision-making for investors and renters.
+**In a production-level environment:**
+* **Back-end Processing:** I would shift the heavy lifting to the database level by writing **SQL Views** in a warehouse like **Snowflake or SQL Server**. This ensures the reporting layer remains lean and performant.
+* **ETL Pipeline:** The current logic is built to be easily migrated into a cloud-based ETL pipeline (e.g., Azure Data Factory), allowing for automated refreshes and better data governance.
 
-## 🗂 Data Source
-Public NZ rental bond statistics (aggregated at quarterly level).
+## ⚙️ Data Transformation (M Code Snippet)
+Below is a snippet of the cleaning logic used in Power Query to ensure data integrity:
 
+```powerquery
+let
+    Source = Csv.Document(File.Contents("NZ_Rent_Data.csv"),[Delimiter=",", Columns=15, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    #"Filtered Regions" = Table.SelectRows(#"Promoted Headers", each ([Region] = "Auckland" or [Region] = "Rotorua")),
+    #"Changed Type" = Table.TransformColumnTypes(#"Filtered Regions",{{"Quarter", type date}, {"Mean Rent", type number}, {"Year", Int64.Type}}),
+    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type", {"Mean Rent"}),
+    #"Added YoY Calc" = Table.AddColumn(#"Removed Errors", "YoY_Growth", each if [Mean Rent] <> null then "Logic Applied" else "Gap")
+in
+    #"Added YoY Calc"
